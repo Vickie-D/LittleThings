@@ -1,0 +1,122 @@
+{
+    "Map/SizeTest": {
+        "height": 4300,
+        "width": 2
+    },
+    "activeFile": "forest-biome.tmx",
+    "expandedProjectPaths": [
+    ],
+    "file.lastUsedOpenFilter": "All Files (*)",
+    "fileStates": {
+        "C:/Users/vicki/OneDrive/Documents/csci/csci458/project5/assets/tiles/Level-01.tmx": {
+            "scale": 0.4543478260869565,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 319.1387559808612,
+                "y": 551.3397129186602
+            }
+        },
+        "Cliff_Tile.tsx": {
+            "scaleInEditor": 1
+        },
+        "Grass.tsx": {
+            "scaleInDock": 2,
+            "scaleInEditor": 1
+        },
+        "TilesetNature.tsx": {
+            "scaleInEditor": 1
+        },
+        "TilledDirt.tsx": {
+            "scaleInEditor": 1
+        },
+        "Water.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "forest-biome.tmx": {
+            "expandedObjectLayers": [
+                3,
+                5,
+                2,
+                7
+            ],
+            "scale": 8.04,
+            "selectedLayer": 6,
+            "viewCenter": {
+                "x": 504.8507462686568,
+                "y": 378.91791044776124
+            }
+        },
+        "forest-biome.tmx#Grass": {
+            "scaleInDock": 1
+        },
+        "forest_biome.tmx": {
+            "scale": 0.78375,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 479.74481658692196,
+                "y": 319.6172248803828
+            }
+        },
+        "level1.tmx": {
+            "scale": 1.6268749999999998,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 239.7233960814445,
+                "y": 160.12293507491356
+            }
+        },
+        "level1.tmx#Grass": {
+            "scaleInDock": 1
+        },
+        "level1.tmx#Hills": {
+            "scaleInDock": 1
+        },
+        "level1.tmx#Water": {
+            "scaleInDock": 1
+        },
+        "plains.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "town-biome.tmx": {
+            "expandedObjectLayers": [
+                3,
+                4,
+                2
+            ],
+            "scale": 2,
+            "selectedLayer": 4,
+            "viewCenter": {
+                "x": 183.5,
+                "y": 318.25
+            }
+        }
+    },
+    "last.imagePath": "C:/Users/vicki/little_things_game/assets/images/tilesets",
+    "map.height": 60,
+    "map.lastUsedFormat": "tmx",
+    "map.tileHeight": 16,
+    "map.tileWidth": 16,
+    "map.width": 60,
+    "openFiles": [
+        "forest-biome.tmx"
+    ],
+    "project": "littleThings.tiled-project",
+    "recentFiles": [
+        "TilesetNature.tsx",
+        "Cliff_Tile.tsx",
+        "level1.tmx",
+        "Water.tsx",
+        "TilledDirt.tsx",
+        "Grass.tsx",
+        "forest-biome.tmx",
+        "forest_biome.tmx",
+        "plains.tsx"
+    ],
+    "tileset.lastUsedFormat": "tsx",
+    "tileset.tileSize": {
+        "height": 16,
+        "width": 16
+    }
+}
