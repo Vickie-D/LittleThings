@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
@@ -7,6 +8,7 @@ import 'package:little_things_game/littleThings.dart';
 import 'package:little_things_game/components/collision_block.dart';
 import 'package:little_things_game/components/custom_hitbox.dart';
 import 'package:little_things_game/components/utils.dart';
+import 'package:little_things_game/components/map_teleport.dart';
 
 
 enum PlayerState {
@@ -26,7 +28,7 @@ enum PlayerState {
 }
 
 
-class Player extends SpriteAnimationGroupComponent with HasGameReference<littleThings>, KeyboardHandler {
+class Player extends SpriteAnimationGroupComponent with HasGameReference<littleThings>, KeyboardHandler, CollisionCallbacks {
   Player({super.position});
 
 
@@ -42,6 +44,7 @@ class Player extends SpriteAnimationGroupComponent with HasGameReference<littleT
   double moveSpeed = 150;
   double horizontalMovement = 0;
   double verticalMovement = 0;
+  bool reachedCheckpoint = false;
   
   Vector2 velocity = Vector2.zero();
 
@@ -60,6 +63,8 @@ class Player extends SpriteAnimationGroupComponent with HasGameReference<littleT
 
   @override
   FutureOr<void> onLoad() {
+    priority = 0;
+
     startingPosition = Vector2(position.x, position.y);
 
     _loadAllAnimations();
@@ -75,10 +80,12 @@ class Player extends SpriteAnimationGroupComponent with HasGameReference<littleT
 
   @override
   void update(double dt) {
-    _updatePlayerState();
-    _updatePlayerMovement(dt);  
-    _checkHorizontalCollisions();
-    _checkVerticalCollisions();
+    if (!reachedCheckpoint){
+      _updatePlayerState();
+      _updatePlayerMovement(dt);  
+      _checkHorizontalCollisions();
+      _checkVerticalCollisions();
+    }
     super.update(dt);
   }
   
@@ -213,4 +220,35 @@ class Player extends SpriteAnimationGroupComponent with HasGameReference<littleT
       }
     }
   }
+
+
+  @override
+  void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
+    if (!reachedCheckpoint){
+      if (other is mapTeleport) _reachedCheckpoint(other.name);
+      super.onCollision(intersectionPoints, other);
+    }
+  }
+
+  void _reachedCheckpoint(String nextMap) {
+    reachedCheckpoint = true;
+    if(scale.x > 0) {
+      position = position - Vector2(14, 19);
+    } else if (scale.x < 0) {
+      position = position + Vector2(14, -19);
+    }
+
+    const reachedCheckpointDuration = Duration(milliseconds: 380);
+    Future.delayed(reachedCheckpointDuration, () {
+      reachedCheckpoint = false;
+      position = Vector2.all(-640);
+      
+      const waitToChangeDuration = Duration(seconds: 0);
+      Future.delayed(waitToChangeDuration, (){
+        game.loadMap(nextMap);
+      });
+    });
+  }
+
+
 }

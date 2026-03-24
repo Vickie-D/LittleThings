@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="30" height="30" tilewidth="16" tileheight="16" infinite="0" nextlayerid="6" nextobjectid="14">
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="30" height="30" tilewidth="16" tileheight="16" infinite="0" nextlayerid="6" nextobjectid="16">
  <tileset firstgid="1" source="Grass.tsx"/>
  <tileset firstgid="78" source="TilledDirt.tsx"/>
  <tileset firstgid="142" source="Cliff_Tile.tsx"/>
@@ -77,11 +77,9 @@
   <object id="8" x="0" y="476" width="480" height="12"/>
   <object id="9" x="0" y="-8" width="480" height="12"/>
   <object id="10" x="476" y="0" width="12" height="480"/>
+  <object id="15" name="forest-biome" type="MapCollision" x="4" y="240" width="4" height="112"/>
  </objectgroup>
  <objectgroup id="3" name="Spawnpoints">
-  <object id="11" name="Forest Spawnpoint" type="Player" x="16" y="276" width="32" height="40"/>
- </objectgroup>
- <objectgroup id="4" name="MapCollisions">
-  <object id="13" name="Forest Teleport" type="Map Collision" x="4" y="248" width="4" height="112"/>
+  <object id="11" name="forest-biome" type="Player" x="16" y="276" width="32" height="40"/>
  </objectgroup>
 </map>

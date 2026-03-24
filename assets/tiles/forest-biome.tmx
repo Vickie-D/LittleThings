@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="30" height="30" tilewidth="16" tileheight="16" infinite="0" nextlayerid="8" nextobjectid="45">
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="30" height="30" tilewidth="16" tileheight="16" infinite="0" nextlayerid="8" nextobjectid="85">
  <tileset firstgid="1" source="Grass.tsx"/>
  <tileset firstgid="78" source="Hills.tsx"/>
  <tileset firstgid="177" source="TilledDirt.tsx"/>
@@ -107,10 +107,10 @@
 </data>
  </layer>
  <objectgroup id="5" name="Spawnpoints">
-  <object id="22" name="Beach Spawnpoint" type="Player" x="260" y="436" width="24" height="28"/>
-  <object id="25" name="Deep Forest Spawnpoint" x="16" y="200" width="24" height="28"/>
-  <object id="31" name="Mountain Spawnpoint" x="372" y="12" width="24" height="28"/>
-  <object id="32" name="Town Spawnpoint" x="440" y="336" width="24" height="28"/>
+  <object id="22" name="beach-biome" type="Player" x="268" y="416" width="24" height="28"/>
+  <object id="25" name="deep-forest-biome" type="Player" x="16" y="200" width="24" height="28"/>
+  <object id="31" name="moutain-biome" type="Player" x="372" y="12" width="24" height="28"/>
+  <object id="32" name="town-biome" type="Player" x="440" y="324" width="24" height="28"/>
  </objectgroup>
  <objectgroup id="7" name="ItemCollisions" visible="0">
   <object id="36" x="168" y="23.4444">
@@ -130,7 +130,7 @@
    <ellipse/>
   </object>
  </objectgroup>
- <objectgroup id="3" name="Collisions" visible="0">
+ <objectgroup id="3" name="Collisions" class="Map Collision">
   <object id="5" x="0" y="-8" width="480" height="12"/>
   <object id="6" x="-8" y="0" width="12" height="480"/>
   <object id="12" x="-8" y="272" width="280" height="16"/>
@@ -144,11 +144,9 @@
   <object id="23" x="240" y="176" height="16"/>
   <object id="29" x="0" y="468" width="260" height="12"/>
   <object id="30" x="284" y="468" width="196" height="12"/>
- </objectgroup>
- <objectgroup id="2" name="MapCollisions">
-  <object id="9" name="Deep Forest Teleport" type="MapCollision" x="4" y="160" width="4" height="112"/>
-  <object id="33" name="Beach Teleport" type="MapCollision" x="260" y="472" width="24" height="4"/>
-  <object id="34" name="Town Teleport" type="Map Collision" x="472" y="304" width="4" height="112"/>
-  <object id="35" name="Mountain Teleport" type="Map Collision" x="336" y="4" width="104" height="4"/>
+  <object id="81" name="deep-forest-biome" type="MapCollision" x="4" y="160" width="4" height="112"/>
+  <object id="82" name="beach-biome" type="MapCollision" x="260" y="472" width="24" height="4"/>
+  <object id="83" name="town-biome" type="MapCollision" x="472" y="304" width="4" height="112"/>
+  <object id="84" name="mountain-biome" type="MapCollision" x="320" y="4" width="120" height="4"/>
  </objectgroup>
 </map>

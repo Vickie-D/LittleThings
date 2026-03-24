@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:flame/camera.dart';
 import 'package:flame/components.dart';
@@ -14,24 +15,42 @@ class littleThings extends FlameGame with HasKeyboardHandlerComponents, HasColli
   late Level level;
   late final CameraComponent cam;
   late Player player;
+  bool isTransitioning = false;
+  // List<String> mapNames = ['town-biome','forest-biome'];
 
   @override
   FutureOr<void> onLoad() async {
     await images.loadAllImages();
     player = Player();
 
-    _loadLevel("forest-biome");
+    // SPAWNPOINT
+    _loadLevel("town-biome", "forest-biome");
+
     debugMode = true;
     return super.onLoad();
   }
 
 
-  void _loadLevel(String levelName) {
-    level = Level(levelName: levelName, player: player);
+  void loadMap(String nextMap) {
+    if (isTransitioning) return;
+    isTransitioning = true;
+
+    final nextLevel = Level(previousMap: level.mapName, mapName: nextMap, player: player);
+    level.removeFromParent();
+    level = nextLevel;
+    cam.world = level;
+    add(level);
+
+    isTransitioning = false;
+  }
+
+  void _loadLevel(String previousMap, String mapName) {
+    log(mapName);
+    level = Level(previousMap: previousMap, mapName: mapName, player: player);
+
 
     final windowWidth = size.x;
     final windowHeight = size.y;
-
 
     cam = CameraComponent(
       world: level,

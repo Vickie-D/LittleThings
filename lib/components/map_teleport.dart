@@ -22,7 +22,7 @@ class mapTeleport extends SpriteAnimationComponent with HasGameReference<littleT
 
     add(RectangleHitbox(
       position: Vector2(0, 0),
-      size: Vector2(36, 48),
+      size: Vector2(5, 30),
       collisionType: CollisionType.passive,
     ),);
 

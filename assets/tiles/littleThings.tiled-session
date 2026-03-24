@@ -3,7 +3,7 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "forest-biome.tmx",
+    "activeFile": "town-biome.tmx",
     "expandedProjectPaths": [
     ],
     "file.lastUsedOpenFilter": "All Files (*)",
@@ -17,16 +17,22 @@
             }
         },
         "Cliff_Tile.tsx": {
+            "scaleInDock": 1,
             "scaleInEditor": 1
         },
         "Grass.tsx": {
             "scaleInDock": 2,
             "scaleInEditor": 1
         },
+        "Hills.tsx": {
+            "scaleInDock": 1
+        },
         "TilesetNature.tsx": {
+            "scaleInDock": 1.5,
             "scaleInEditor": 1
         },
         "TilledDirt.tsx": {
+            "scaleInDock": 1,
             "scaleInEditor": 1
         },
         "Water.tsx": {
@@ -35,16 +41,15 @@
         },
         "forest-biome.tmx": {
             "expandedObjectLayers": [
-                3,
                 5,
-                2,
-                7
+                7,
+                3
             ],
-            "scale": 8.04,
-            "selectedLayer": 6,
+            "scale": 1.5,
+            "selectedLayer": 5,
             "viewCenter": {
-                "x": 504.8507462686568,
-                "y": 378.91791044776124
+                "x": 247.99999999999997,
+                "y": 261.66666666666663
             }
         },
         "forest-biome.tmx#Grass": {
@@ -81,15 +86,14 @@
         },
         "town-biome.tmx": {
             "expandedObjectLayers": [
-                3,
-                4,
-                2
+                2,
+                3
             ],
-            "scale": 2,
-            "selectedLayer": 4,
+            "scale": 1.5,
+            "selectedLayer": 2,
             "viewCenter": {
-                "x": 183.5,
-                "y": 318.25
+                "x": 295.33333333333337,
+                "y": 172.99999999999997
             }
         }
     },
@@ -100,17 +104,19 @@
     "map.tileWidth": 16,
     "map.width": 60,
     "openFiles": [
-        "forest-biome.tmx"
+        "forest-biome.tmx",
+        "town-biome.tmx"
     ],
     "project": "littleThings.tiled-project",
     "recentFiles": [
+        "forest-biome.tmx",
+        "town-biome.tmx",
         "TilesetNature.tsx",
         "Cliff_Tile.tsx",
         "level1.tmx",
         "Water.tsx",
         "TilledDirt.tsx",
         "Grass.tsx",
-        "forest-biome.tmx",
         "forest_biome.tmx",
         "plains.tsx"
     ],
