@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:developer';
 
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
@@ -12,10 +11,6 @@ import 'package:little_things_game/components/map_teleport.dart';
 
 
 enum PlayerState {
-  // walkUp("character-up", 4),
-  // walkDown("character-down", 4),
-  // walkLeft("character-left", 4),
-  // walkRight("character-right", 4),
   walkLeft("male_WalkLeft", 6),
   walkRight("male_WalkRight", 6),
   walkDown("male_WalkDown", 6),
@@ -50,10 +45,6 @@ class Player extends SpriteAnimationGroupComponent with HasGameReference<littleT
 
   List<CollisionBlock> collisionBlocks = [];
   CustomHitbox hitbox = CustomHitbox(
-    // offsetX: 18,
-    // offsetY: 16,
-    // width: 12,
-    // height: 16,
     offsetX: 0,
     offsetY: 0,
     width: 14,
@@ -63,7 +54,7 @@ class Player extends SpriteAnimationGroupComponent with HasGameReference<littleT
 
   @override
   FutureOr<void> onLoad() {
-    priority = 0;
+    priority = 1;
 
     startingPosition = Vector2(position.x, position.y);
 
@@ -92,23 +83,17 @@ class Player extends SpriteAnimationGroupComponent with HasGameReference<littleT
 
   @override
   bool onKeyEvent(KeyEvent event, Set<LogicalKeyboardKey> keysPressed) {
+
+// player movement
     horizontalMovement = 0;
     verticalMovement = 0;
 
-    // final isLeftKeyPressed = keysPressed.contains(LogicalKeyboardKey.keyA) 
-    // || keysPressed.contains(LogicalKeyboardKey.arrowLeft);
-    // final isRightKeyPressed = keysPressed.contains(LogicalKeyboardKey.keyD) 
-    // || keysPressed.contains(LogicalKeyboardKey.arrowRight);
-    // final isUpKeyPressed = keysPressed.contains(LogicalKeyboardKey.keyW) 
-    // || keysPressed.contains(LogicalKeyboardKey.arrowUp);
-    // final isDownKeyPressed = keysPressed.contains(LogicalKeyboardKey.keyS) 
-    // || keysPressed.contains(LogicalKeyboardKey.arrowDown);
-
 
     final isLeftKeyPressed = keysPressed.contains(LogicalKeyboardKey.keyA) 
-    || keysPressed.contains(LogicalKeyboardKey.arrowLeft);
+      || keysPressed.contains(LogicalKeyboardKey.arrowLeft);
     final isRightKeyPressed = keysPressed.contains(LogicalKeyboardKey.keyD) 
-    || keysPressed.contains(LogicalKeyboardKey.arrowRight);
+      || keysPressed.contains(LogicalKeyboardKey.arrowRight);
+
 
 
     if(!isLeftKeyPressed && !isRightKeyPressed){
@@ -124,11 +109,30 @@ class Player extends SpriteAnimationGroupComponent with HasGameReference<littleT
       horizontalMovement += isRightKeyPressed ? 1 : 0;
     }
 
-    // verticalMovement += isUpKeyPressed ? -1 : 0;
-    // verticalMovement += isDownKeyPressed ? 1 : 0;
 
-    // horizontalMovement += isLeftKeyPressed ? -1 : 0;
-    // horizontalMovement += isRightKeyPressed ? 1 : 0;
+// hotbar
+    if (keysPressed.contains(LogicalKeyboardKey.digit0)) {
+      game.selectSlot(0);
+    } else if (keysPressed.contains(LogicalKeyboardKey.digit1)) {
+      game.selectSlot(1);
+    } else if (keysPressed.contains(LogicalKeyboardKey.digit2)) {
+      game.selectSlot(2);
+    } else if (keysPressed.contains(LogicalKeyboardKey.digit3)) {
+      game.selectSlot(3);
+    } else if (keysPressed.contains(LogicalKeyboardKey.digit4)) {
+      game.selectSlot(4);
+    } else if (keysPressed.contains(LogicalKeyboardKey.digit5)) {
+      game.selectSlot(5);
+    } else if (keysPressed.contains(LogicalKeyboardKey.digit6)) {
+      game.selectSlot(6);
+    } else if (keysPressed.contains(LogicalKeyboardKey.digit7)) {
+      game.selectSlot(7);
+    } else if (keysPressed.contains(LogicalKeyboardKey.digit8)) {
+      game.selectSlot(8);
+    } else if (keysPressed.contains(LogicalKeyboardKey.digit9)) {
+      game.selectSlot(9);
+    }
+    
 
     return super.onKeyEvent(event, keysPressed);
   }
@@ -249,6 +253,5 @@ class Player extends SpriteAnimationGroupComponent with HasGameReference<littleT
       });
     });
   }
-
 
 }

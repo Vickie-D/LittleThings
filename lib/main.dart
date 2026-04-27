@@ -2,6 +2,7 @@ import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:little_things_game/components/hotbar.dart';
 import 'package:little_things_game/littleThings.dart';
 
 void main() {
@@ -12,7 +13,11 @@ void main() {
   littleThings game = littleThings();
   runApp(
     GameWidget(
-      game: kDebugMode ? littleThings() : game
+      game: kDebugMode ? littleThings() : game,
+      overlayBuilderMap: {
+        'Hotbar': (context, game) => Hotbar(game: game as littleThings),
+      },
+      initialActiveOverlays: const ['Hotbar'],
     )
   );
 }

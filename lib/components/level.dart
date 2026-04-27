@@ -1,11 +1,11 @@
 import 'dart:async';
-import 'dart:developer';
 
 import 'package:flame/components.dart';
 import 'package:little_things_game/components/map_teleport.dart';
 import 'package:little_things_game/littleThings.dart';
 import 'package:flame_tiled/flame_tiled.dart';
 import 'package:little_things_game/components/player.dart';
+import 'package:little_things_game/components/npc.dart';
 import 'package:little_things_game/components/collision_block.dart';
 
 
@@ -39,53 +39,26 @@ class Level extends World with HasGameReference<littleThings> {
     final spawnPointsLayer = map.tileMap.getLayer<ObjectGroup>('Spawnpoints');
 
     if(spawnPointsLayer != null) {
-      // final spawnPoint = spawnPointsLayer.objects.firstWhere((obj) => obj.name == previousMap);
       final spawnPoint = spawnPointsLayer.objects.firstWhere((obj) => obj.name == previousMap);
 
       player.position = Vector2(spawnPoint.x, spawnPoint.y);
       add(player);
-      // for (final spawnPoint in spawnPointsLayer.objects) {
-      //   switch (spawnPoint.class_) {
-      //     case "Player":
-      //       final spawnPointSpot = spawnPoint.fire
-      //       player.position = Vector2(spawnPoint.x, spawnPoint.y);
-      //       add(player);
-      //       player.scale = Vector2(1.0, 1.0);
-      //       break;
-      //   }
-      // }
-    }
-  }
-  
 
-  void _teleportCollisions() {
-    final teleportCollisionsLayer = map.tileMap.getLayer<ObjectGroup>('Map Collisions');
 
-    if(teleportCollisionsLayer != null) {
-      for(final teleportCollision in teleportCollisionsLayer.objects){
-        switch (teleportCollision.class_) {
-          case 'town-biome':
-            break;
-          case 'forest-biome':
-            break;
-          case 'beach-biome':
-            break;
-          case 'mountain-biome':
-            break;
-          case 'deep-forest-biome':
+      for (final spawnPoint in spawnPointsLayer.objects) {
+        switch (spawnPoint.class_) {
+          case "NPC":
+            final npc = Npc(
+              position: Vector2(spawnPoint.x, spawnPoint.y),
+              size: Vector2(spawnPoint.width, spawnPoint.height),            
+            );
+            add(npc);
             break;
           default:
         }
       }
     }
-  }
-
-  // void spawnPoints(String name) {
-  //   switch(name) { 
-  //     case "Deep-Forest":
-  //       spawnPoint = 
-  //   }
-  // }
+  }                      
 
   void _addCollisions() {
     final collisionsLayer = map.tileMap.getLayer<ObjectGroup>('Collisions');
