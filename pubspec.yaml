@@ -26,4 +26,7 @@ flutter:
     - assets/characters/
     - assets/images/tilesets/
     - assets/images/character/
-    - assets/images/
+    - assets/images/character/Sword/
+    - assets/images/items/
+    - assets/images/items/Branch/
+    - assets/images/items/Sword/

@@ -4,14 +4,11 @@ import 'dart:developer';
 import 'package:flame/camera.dart';
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
-import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/services.dart';
-import 'package:little_things_game/components/hotbar.dart';
 import 'package:little_things_game/components/level.dart';
 import 'package:little_things_game/components/npc.dart';
 import 'package:little_things_game/components/player.dart';
+import 'package:little_things_game/components/item.dart';
 
 
 class littleThings extends FlameGame with HasKeyboardHandlerComponents, HasCollisionDetection{
@@ -23,6 +20,8 @@ class littleThings extends FlameGame with HasKeyboardHandlerComponents, HasColli
   late Npc npc;
   bool isTransitioning = false;
   int selectedIndex = 0;
+  // List<String?> hotbarItems = List.filled(10, null);
+  List<String> hotbarItems = List.filled(10, "");
 
 
   @override
@@ -32,7 +31,7 @@ class littleThings extends FlameGame with HasKeyboardHandlerComponents, HasColli
     await images.loadAllImages();
 
     // SPAWNPOINT
-    _loadLevel("town-biome", "forest-biome");
+    _loadLevel("start-spawn", "town-biome");
 
     debugMode = true;
     // return super.onLoad();
@@ -41,8 +40,20 @@ class littleThings extends FlameGame with HasKeyboardHandlerComponents, HasColli
   
   void selectSlot(int index) {
     selectedIndex = index;
+    player.itemPath = "${hotbarItems[index]}";
     overlays.remove('Hotbar');
     overlays.add('Hotbar');
+  }
+
+  void addToHotbar(String itemName) {
+    for (int i = 0; i < hotbarItems.length; i++) {
+      if (hotbarItems[i] == "") {
+        hotbarItems[i] = itemName;
+        overlays.remove('Hotbar');
+        overlays.add('Hotbar');
+        break;
+      }
+    }
   }
 
   void loadMap(String nextMap) {
@@ -62,7 +73,6 @@ class littleThings extends FlameGame with HasKeyboardHandlerComponents, HasColli
 
   void _loadLevel(String previousMap, String mapName) {
     level = Level(previousMap: previousMap, mapName: mapName, player: player);
-
 
 
     final windowWidth = size.x;

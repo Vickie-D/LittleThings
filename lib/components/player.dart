@@ -8,13 +8,21 @@ import 'package:little_things_game/components/collision_block.dart';
 import 'package:little_things_game/components/custom_hitbox.dart';
 import 'package:little_things_game/components/utils.dart';
 import 'package:little_things_game/components/map_teleport.dart';
+import 'package:little_things_game/components/item.dart';
 
 
 enum PlayerState {
   walkLeft("male_WalkLeft", 6),
   walkRight("male_WalkRight", 6),
   walkDown("male_WalkDown", 6),
+  walkUp("male_WalkUp", 6),
   idle("male_Idle", 1),
+
+  walkLeft_Sword("male_WalkLeft", 6),
+  walkRight_Sword("male_WalkRight", 6),
+  walkDown_Sword("male_WalkDown", 6),
+  walkUp_Sword("male_WalkUp", 6),
+  idle_Sword("male_Idle", 1),
   ;
 
   final String assetName;
@@ -33,8 +41,14 @@ class Player extends SpriteAnimationGroupComponent with HasGameReference<littleT
   late final SpriteAnimation walkRightAnimation;
   late final SpriteAnimation idleAnimation;
 
-  late final Vector2 startingPosition;
+  late final SpriteAnimation walkUp_SwordAnimation;
+  late final SpriteAnimation walkDown_SwordAnimation;
+  late final SpriteAnimation walkLeft_SwordAnimation;
+  late final SpriteAnimation walkRight_SwordAnimation;
+  late final SpriteAnimation idle_SwordAnimation;
 
+  late final Vector2 startingPosition;
+  late String itemPath = "";
   final double stepTime = 0.05;
   double moveSpeed = 150;
   double horizontalMovement = 0;
@@ -149,44 +163,64 @@ class Player extends SpriteAnimationGroupComponent with HasGameReference<littleT
     PlayerState playerState = PlayerState.idle;
 
 
-    if(velocity.x < 0) { playerState = PlayerState.walkLeft; }
 
-    if(velocity.x > 0) { playerState = PlayerState.walkRight; }
+    if (itemPath == "Sword"){
+      if(velocity.x < 0) { playerState = PlayerState.walkLeft_Sword; }
+      if(velocity.x > 0) { playerState = PlayerState.walkRight_Sword; }
+      if(velocity.y > 0) { playerState = PlayerState.walkDown_Sword; }
+      if(velocity.y < 0) { playerState = PlayerState.walkUp_Sword; }
+      if(velocity.y == 0 && velocity.x ==0) { playerState = PlayerState.idle_Sword; }
+    }
 
-    if(velocity.y > 0 || velocity.y < 0 ){
-      playerState = PlayerState.walkDown;
+    
+    else {
+      if(velocity.x < 0) { playerState = PlayerState.walkLeft; }
+      if(velocity.x > 0) { playerState = PlayerState.walkRight; }
+      if(velocity.y > 0) { playerState = PlayerState.walkDown; }
+      if(velocity.y < 0) { playerState = PlayerState.walkUp; }
     }
 
     current = playerState;
   }
 
   void _loadAllAnimations() {
-    idleAnimation = _spriteAnimation(PlayerState.idle);
-    // walkUpAnimation = _spriteAnimation(PlayerState.walkUp);
-    walkDownAnimation = _spriteAnimation(PlayerState.walkDown);
-    walkLeftAnimation = _spriteAnimation(PlayerState.walkLeft);
-    walkRightAnimation = _spriteAnimation(PlayerState.walkRight);
+    idleAnimation = _spriteAnimation(PlayerState.idle, "");
+    walkUpAnimation = _spriteAnimation(PlayerState.walkUp, "");
+    walkDownAnimation = _spriteAnimation(PlayerState.walkDown, "");
+    walkLeftAnimation = _spriteAnimation(PlayerState.walkLeft, "");
+    walkRightAnimation = _spriteAnimation(PlayerState.walkRight, "");
+
+
+    idle_SwordAnimation = _spriteAnimation(PlayerState.idle_Sword, "/Sword");
+    walkUp_SwordAnimation = _spriteAnimation(PlayerState.walkUp_Sword, "/Sword");
+    walkDown_SwordAnimation = _spriteAnimation(PlayerState.walkDown_Sword, "/Sword");
+    walkLeft_SwordAnimation = _spriteAnimation(PlayerState.walkLeft_Sword, "/Sword");
+    walkRight_SwordAnimation = _spriteAnimation(PlayerState.walkRight_Sword, "/Sword");
 
     animations = {
       PlayerState.idle: idleAnimation,
-      // PlayerState.walkUp: walkUpAnimation,
+      PlayerState.walkUp: walkUpAnimation,
       PlayerState.walkDown: walkDownAnimation,
       PlayerState.walkLeft: walkLeftAnimation,
       PlayerState.walkRight: walkRightAnimation,
+      
+      PlayerState.idle_Sword: idle_SwordAnimation,
+      PlayerState.walkUp_Sword: walkUp_SwordAnimation,
+      PlayerState.walkDown_Sword: walkDown_SwordAnimation,
+      PlayerState.walkLeft_Sword: walkLeft_SwordAnimation,
+      PlayerState.walkRight_Sword: walkRight_SwordAnimation,
     };
 
     current = PlayerState.idle;
   }
 
-  SpriteAnimation _spriteAnimation(PlayerState state) {
+  SpriteAnimation _spriteAnimation(PlayerState state, String itemPath) {
     return SpriteAnimation.fromFrameData(
-      game.images.fromCache("character/${state.assetName}.png"),
-
+      game.images.fromCache("character$itemPath/${state.assetName}.png"),
       SpriteAnimationData.sequenced(
         amount: state.frameCount,
         stepTime: 0.08,
-        // textureSize: Vector2.all(48),
-        textureSize: Vector2(14, 19),
+        textureSize: Vector2(20, 20),
       )
     );
   }
@@ -230,6 +264,13 @@ class Player extends SpriteAnimationGroupComponent with HasGameReference<littleT
   void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
     if (!reachedCheckpoint){
       if (other is mapTeleport) _reachedCheckpoint(other.name);
+      if (other is Item) {
+        if (!other.collected){
+          game.addToHotbar(other.itemName);
+          other.collect();
+          print("it works here ");
+        }
+      };
       super.onCollision(intersectionPoints, other);
     }
   }
@@ -237,9 +278,9 @@ class Player extends SpriteAnimationGroupComponent with HasGameReference<littleT
   void _reachedCheckpoint(String nextMap) {
     reachedCheckpoint = true;
     if(scale.x > 0) {
-      position = position - Vector2(14, 19);
+      position = position - Vector2(20, 20);
     } else if (scale.x < 0) {
-      position = position + Vector2(14, -19);
+      position = position + Vector2(20, -20);
     }
 
     const reachedCheckpointDuration = Duration(milliseconds: 380);

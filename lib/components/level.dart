@@ -6,6 +6,7 @@ import 'package:little_things_game/littleThings.dart';
 import 'package:flame_tiled/flame_tiled.dart';
 import 'package:little_things_game/components/player.dart';
 import 'package:little_things_game/components/npc.dart';
+import 'package:little_things_game/components/item.dart';
 import 'package:little_things_game/components/collision_block.dart';
 
 
@@ -54,6 +55,17 @@ class Level extends World with HasGameReference<littleThings> {
             );
             add(npc);
             break;
+          case "Item":
+            if(!game.hotbarItems.contains(spawnPoint.name)){
+              final item = Item(
+                itemName: spawnPoint.name,
+                position: Vector2(spawnPoint.x, spawnPoint.y),
+                iconPath: "items/${spawnPoint.name}",
+                collected: false,
+              );
+              add(item);
+            }
+            break;
           default:
         }
       }
@@ -74,6 +86,7 @@ class Level extends World with HasGameReference<littleThings> {
             );
             add(playerTeleport);
             break;
+
           default:
             final block = CollisionBlock(
               position: Vector2(collision.x, collision.y),
