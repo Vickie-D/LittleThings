@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:little_things_game/littleThings.dart';
 
-// class Hotbar extends SpriteComponent with HasGameReference<littleThings>, KeyboardHandler{
 
 class Hotbar extends StatelessWidget {
   final littleThings game;
@@ -38,15 +37,6 @@ class Hotbar extends StatelessWidget {
                 ),
                 child: Container(
                   padding: const EdgeInsets.symmetric(vertical: 1.5, horizontal: 5.0),
-                  // child: Text(
-                  //   '$index',
-                  //   textAlign: TextAlign.left,
-                  //   style: const TextStyle(
-                  //     color: Color.fromRGBO(197, 139, 25, 100),
-                  //     fontWeight: FontWeight.bold,
-                  //   ),
-                  // ),
-
                   child: Stack(
                     children: [
                       if (game.hotbarItems[index] != "")

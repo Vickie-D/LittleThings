@@ -1,13 +1,16 @@
 import 'dart:async';
 
 import 'package:flame/components.dart';
+import 'package:little_things_game/components/enemy.dart';
 import 'package:little_things_game/components/map_teleport.dart';
+import 'package:little_things_game/components/rock.dart';
 import 'package:little_things_game/littleThings.dart';
 import 'package:flame_tiled/flame_tiled.dart';
 import 'package:little_things_game/components/player.dart';
 import 'package:little_things_game/components/npc.dart';
 import 'package:little_things_game/components/item.dart';
 import 'package:little_things_game/components/collision_block.dart';
+import 'package:little_things_game/components/dialog_manager.dart';
 
 
 class Level extends World with HasGameReference<littleThings> {
@@ -50,10 +53,19 @@ class Level extends World with HasGameReference<littleThings> {
         switch (spawnPoint.class_) {
           case "NPC":
             final npc = Npc(
+              name: spawnPoint.name,
               position: Vector2(spawnPoint.x, spawnPoint.y),
               size: Vector2(spawnPoint.width, spawnPoint.height),            
             );
             add(npc);
+            break;
+          case "Enemy":
+            final enemy = Enemy(
+              name: spawnPoint.name,
+              position: Vector2(spawnPoint.x, spawnPoint.y),
+              size: Vector2(spawnPoint.width, spawnPoint.height),            
+            );
+            add(enemy);
             break;
           case "Item":
             if(!game.hotbarItems.contains(spawnPoint.name)){
@@ -86,7 +98,13 @@ class Level extends World with HasGameReference<littleThings> {
             );
             add(playerTeleport);
             break;
-
+          case 'Breakable':
+            final rock = Rock(
+              position: Vector2(collision.x, collision.y),
+              size: Vector2(collision.width, collision.height),
+            );
+            if(!DialogManager.unlockedDeepForest) add(rock);
+            break;
           default:
             final block = CollisionBlock(
               position: Vector2(collision.x, collision.y),

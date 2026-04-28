@@ -88,7 +88,7 @@
  <objectgroup id="3" name="Spawnpoints">
   <object id="11" name="forest-biome" type="Player" x="16" y="276" width="32" height="40"/>
   <object id="18" name="start-spawn" type="Player" x="192" y="264" width="32" height="40"/>
-  <object id="21" name="Town Chief" type="NPC" x="180" y="204" width="48" height="28"/>
-  <object id="22" name="Baker" type="NPC" x="288" y="220" width="48" height="28"/>
+  <object id="21" name="Master" type="NPC" x="180" y="216" width="48" height="28"/>
+  <object id="22" name="Boy" type="NPC" x="292" y="228" width="48" height="28"/>
  </objectgroup>
 </map>

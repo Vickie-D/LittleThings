@@ -1,14 +1,12 @@
 import 'package:flame/components.dart';
 import 'package:flame/collisions.dart';
 import 'package:little_things_game/littleThings.dart';
-import 'package:little_things_game/components/player.dart';
 
 class Item extends SpriteAnimationComponent with HasGameReference<littleThings>, CollisionCallbacks {
   
   final String itemName;
   final double stepTime = 0.05;
   final String iconPath;
-  // bool collected = false;
   bool collected;
 
   Item({
@@ -29,14 +27,16 @@ class Item extends SpriteAnimationComponent with HasGameReference<littleThings>,
       collisionType: CollisionType.passive,
     ),);
 
-    animation = SpriteAnimation.fromFrameData(
-      game.images.fromCache("$iconPath/$itemName.png"),
-      SpriteAnimationData.sequenced(
-        amount: 1,
-        stepTime: 0.05,
-        textureSize: Vector2(20, 20),
-      )
-    );
+    if(itemName != "Branch") {
+      animation = SpriteAnimation.fromFrameData(
+        game.images.fromCache("$iconPath/$itemName.png"),
+        SpriteAnimationData.sequenced(
+          amount: 1,
+          stepTime: 0.05,
+          textureSize: Vector2(20, 20),
+        )
+      );
+    }
     
     return super.onLoad();
   }

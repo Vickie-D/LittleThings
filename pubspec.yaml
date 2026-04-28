@@ -23,10 +23,18 @@ flutter:
   uses-material-design: true
   assets:
     - assets/tiles/
-    - assets/characters/
     - assets/images/tilesets/
     - assets/images/character/
+    - assets/images/character/Caveman/
+    - assets/images/character/Master/
+    - assets/images/character/Boy/
+    - assets/images/character/Bunny/
+    - assets/images/character/Frog/
     - assets/images/character/Sword/
+    - assets/images/enemy/Warrior/
+    - assets/images/enemy/Slime/
+    - assets/images/dialog/
     - assets/images/items/
     - assets/images/items/Branch/
+    - assets/images/items/Pickaxe/
     - assets/images/items/Sword/

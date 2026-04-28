@@ -1,14 +1,12 @@
 import 'dart:async';
-import 'dart:developer';
 
-import 'package:flame/camera.dart';
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
 import 'package:little_things_game/components/level.dart';
 import 'package:little_things_game/components/npc.dart';
 import 'package:little_things_game/components/player.dart';
-import 'package:little_things_game/components/item.dart';
+import 'package:little_things_game/components/dialog_manager.dart';
 
 
 class littleThings extends FlameGame with HasKeyboardHandlerComponents, HasCollisionDetection{
@@ -18,26 +16,37 @@ class littleThings extends FlameGame with HasKeyboardHandlerComponents, HasColli
   late final CameraComponent cam;
   late Player player;
   late Npc npc;
-  bool isTransitioning = false;
+  late DialogManager dialogManager;
+
   int selectedIndex = 0;
-  // List<String?> hotbarItems = List.filled(10, null);
+  bool isTransitioning = false;
   List<String> hotbarItems = List.filled(10, "");
+  String textOverlayed = "";
+  String speaker = "";
+
+  bool rockObtained = false;
 
 
   @override
   FutureOr<void> onLoad() async {
     player = Player();
-    npc = Npc();
+    dialogManager = DialogManager();
+    overlays.add('HealthDisplay');
+
     await images.loadAllImages();
 
     // SPAWNPOINT
     _loadLevel("start-spawn", "town-biome");
 
     debugMode = true;
-    // return super.onLoad();
   }
 
-  
+  void updateHealth(){
+    overlays.remove('HealthDisplay');
+    overlays.add('HealthDisplay');
+  }
+
+// hotbars
   void selectSlot(int index) {
     selectedIndex = index;
     player.itemPath = "${hotbarItems[index]}";
@@ -56,12 +65,52 @@ class littleThings extends FlameGame with HasKeyboardHandlerComponents, HasColli
     }
   }
 
+
+
+// Text
+  void npcGetMessage(String npc) {
+    final text = dialogManager.getDialog(npc);
+
+    if (text.isEmpty) {
+      overlays.remove('TextOverlay');
+      return;
+    }
+
+    Future.delayed(const Duration(seconds: 5), () { 
+      overlays.remove('TextOverlay'); }
+    );
+    
+    speaker = npc;
+    textOverlayed = text;
+    overlays.add('TextOverlay');
+  }
+
+  void showTextOverlay(String npc, String text) {
+    speaker = npc;
+    textOverlayed = text;
+    overlays.add('TextOverlay');
+  }
+
+  void hideTextOverlay() {
+    overlays.remove('TextOverlay');
+  }
+
+
+
+// Map
+  void reset() {
+    final nextLevel = Level(previousMap: "start-spawn", mapName: "town-biome", player: player);
+    level.removeFromParent();
+    level = nextLevel;
+    cam.world = level;
+    add(level);
+
+    isTransitioning = false;  }
+
   void loadMap(String nextMap) {
     if (isTransitioning) return;
     isTransitioning = true;
 
-    log("You are going from : " + level.mapName);
-    log("You are going to : " + nextMap);
     final nextLevel = Level(previousMap: level.mapName, mapName: nextMap, player: player);
     level.removeFromParent();
     level = nextLevel;
@@ -80,10 +129,10 @@ class littleThings extends FlameGame with HasKeyboardHandlerComponents, HasColli
 
     cam = CameraComponent(
       world: level,
-      viewport: FixedSizeViewport(
-        windowWidth,
-        windowHeight
-      ),
+      // viewport: FixedSizeViewport(
+      //   windowWidth,
+      //   windowHeight
+      // ),
     );
 
 
