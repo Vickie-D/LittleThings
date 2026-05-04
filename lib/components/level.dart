@@ -68,7 +68,7 @@ class Level extends World with HasGameReference<littleThings> {
             add(enemy);
             break;
           case "Item":
-            if(!game.hotbarItems.contains(spawnPoint.name)){
+            if(!game.hotbarItems.contains(spawnPoint.name) || (spawnPoint.name == "Stick" && !game.stickObtained)){
               final item = Item(
                 itemName: spawnPoint.name,
                 position: Vector2(spawnPoint.x, spawnPoint.y),
@@ -103,7 +103,7 @@ class Level extends World with HasGameReference<littleThings> {
               position: Vector2(collision.x, collision.y),
               size: Vector2(collision.width, collision.height),
             );
-            if(!DialogManager.unlockedDeepForest) add(rock);
+            if(!game.unlockedDeepForest) add(rock);
             break;
           default:
             final block = CollisionBlock(

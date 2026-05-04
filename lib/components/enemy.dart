@@ -38,6 +38,8 @@ class Enemy extends SpriteAnimationComponent
   final double attackRange = 30; 
   final double attackDelay = 1.0; 
 
+  double maxHealth = 80;
+  late double currentHealth = 80;
 
   @override
   FutureOr<void> onLoad() async {
@@ -89,6 +91,14 @@ class Enemy extends SpriteAnimationComponent
     Future.delayed(const Duration(milliseconds: 400), () {
       _isAttacking = false;
     });
+  }
+
+  void takeDamage(double amount) {
+    currentHealth = (currentHealth - amount).clamp(0, maxHealth);
+    game.updateHealth();
+    if (currentHealth == 0){
+      removeFromParent();
+    }
   }
 
   void _idle() {

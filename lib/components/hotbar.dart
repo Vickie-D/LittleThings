@@ -49,8 +49,8 @@ class Hotbar extends StatelessWidget {
                           ),
                         ),
                       Positioned(
-                        top: 2,
-                        left: 4,
+                        top: 0,
+                        left: 2,
                         child: Text(
                           '$index',
                           style: const TextStyle(

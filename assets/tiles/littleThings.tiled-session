@@ -3,7 +3,7 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "forest-biome.tmx",
+    "activeFile": "town-biome.tmx",
     "expandedProjectPaths": [
     ],
     "file.lastUsedOpenFilter": "All Files (*)",
@@ -37,9 +37,10 @@
             "scaleInEditor": 1
         },
         "Hills.tsx": {
-            "scaleInDock": 1
+            "scaleInDock": 2
         },
         "House.tsx": {
+            "scaleInDock": 1,
             "scaleInEditor": 1
         },
         "House1.tsx": {
@@ -51,18 +52,19 @@
             "scaleInEditor": 1
         },
         "TilesetVillageAbandoned.tsx": {
+            "scaleInDock": 1.5,
             "scaleInEditor": 1
         },
         "TilledDirt.tsx": {
-            "scaleInDock": 1,
+            "scaleInDock": 4,
             "scaleInEditor": 1
         },
         "Water-1.png.tsx": {
-            "scaleInDock": 1,
+            "scaleInDock": 8,
             "scaleInEditor": 1
         },
         "Water.tsx": {
-            "scaleInDock": 1,
+            "scaleInDock": 4,
             "scaleInEditor": 1
         },
         "Water_Tile.tsx": {
@@ -77,8 +79,8 @@
             "scale": 1,
             "selectedLayer": 4,
             "viewCenter": {
-                "x": 225.5,
-                "y": 286.5
+                "x": 239.5,
+                "y": 239.5
             }
         },
         "deep-forest-biome.tmx": {
@@ -89,21 +91,21 @@
             "scale": 4,
             "selectedLayer": 8,
             "viewCenter": {
-                "x": 130.375,
-                "y": 61.625
+                "x": 120.125,
+                "y": 120.125
             }
         },
         "forest-biome.tmx": {
             "expandedObjectLayers": [
-                3,
                 5,
-                7
+                7,
+                3
             ],
             "scale": 2,
-            "selectedLayer": 3,
+            "selectedLayer": 2,
             "viewCenter": {
-                "x": 142.75,
-                "y": 232.25
+                "x": 240.25,
+                "y": 539.75
             }
         },
         "forest-biome.tmx#Grass": {
@@ -142,8 +144,8 @@
             "scale": 2,
             "selectedLayer": 2,
             "viewCenter": {
-                "x": 129.75,
-                "y": 171.75
+                "x": 159.75,
+                "y": 159.75
             }
         },
         "plains.tsx": {
@@ -171,25 +173,24 @@
     "map.width": 30,
     "openFiles": [
         "forest-biome.tmx",
-        "town-biome.tmx",
         "mountain-biome.tmx",
         "beach-biome.tmx",
-        "Water-1.png.tsx",
-        "Bitmask references 1.tsx"
+        "town-biome.tmx",
+        "deep-forest-biome.tmx"
     ],
     "project": "littleThings.tiled-project",
     "recentFiles": [
+        "forest-biome.tmx",
+        "mountain-biome.tmx",
+        "beach-biome.tmx",
         "deep-forest-biome.tmx",
+        "town-biome.tmx",
         "TilesetVillageAbandoned.tsx",
         "House.tsx",
         "House1.tsx",
         "Water.tsx",
-        "town-biome.tmx",
         "Bitmask references 1.tsx",
         "Water-1.png.tsx",
-        "beach-biome.tmx",
-        "mountain-biome.tmx",
-        "forest-biome.tmx",
         "Water_Tile.tsx"
     ],
     "tileset.lastUsedFormat": "tsx",

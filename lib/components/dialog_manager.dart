@@ -1,3 +1,5 @@
+import 'package:little_things_game/littleThings.dart';
+
 class DialogLine {
   final String text;
   final bool Function() condition;
@@ -8,68 +10,85 @@ class DialogLine {
   });
 }
 
-class DialogManager {
-  final Map<String, List<DialogLine>> _dialogs = {
-    "Event": [
-      DialogLine(
-        text: "You unlocked the Deep Forest!",
-        condition: () => unlockedDeepForest,
-      ),
-    ],
-    "Master": [
-      DialogLine(
-        text: "Hi!!",
-        condition: () => true,
-      ),
-      DialogLine(
-        text: "Welcome to Little Town!",
-        condition: () => true,
-      ),
-      DialogLine(
-        text: "We have beautiful things around the town! We have the beautiful forest and if you're lucky enough... you can find things around.",
-        condition: () => true,
-      ),
-      DialogLine(
-        text: "Anyway! Go ahead and introduce yourself around town!",
-        condition: () => true,
-      ),
-    ],
-    "Boy": [
-      DialogLine(
-        text: "Ribbit!",
-        condition: () => true,
-      ),
-      DialogLine(
-        text: "Beware for trouble!",
-        condition: () => true,
-      ),
-      DialogLine(
-        text: "Give me some supplies and I might can make you something good!",
-        condition: () => true,
-      ),
-      DialogLine(
-        text: "You survived the forest?!",
-        condition: () => unlockedDeepForest,
-      ),
-    ],
-    "Caveman": [
-    DialogLine(
-      text: "Do you want a rock!",
-      condition: () => true,
-    ),
-    DialogLine(
-      text: "I made these with my own two hands",
-      condition: () => true,
-    ),
-    DialogLine(
-      text: "Who knows.. that rock can do you well.",
-      condition: () => true,
-    ),
-    ],
-  };
+class DialogManager{
+  final littleThings game;
+
+  late final Map<String, List<DialogLine>> _dialogs;
 
   final Map<String, int> _indexes = {};
-  static bool unlockedDeepForest = false;
+
+  DialogManager(this.game) {
+    _initDialogs();
+  }
+
+  void _initDialogs() {
+    _dialogs = {
+      "Event": [
+        DialogLine(
+          text: "You unlocked the Deep Forest!",
+          condition: () => game.unlockedDeepForest,
+        ),
+      ],
+      "Master": [
+        DialogLine(
+          text: "Hi!!",
+          condition: () => true,
+        ),
+        DialogLine(
+          text: "Welcome to Little Town!",
+          condition: () => true,
+        ),
+        DialogLine(
+          text: "We have beautiful things around the town! We have the beautiful forest and if you're lucky enough... you can find things around.",
+          condition: () => true,
+        ),
+        DialogLine(
+          text: "Anyway! Go ahead and introduce yourself around town!",
+          condition: () => true,
+        ),
+      ],
+      "Boy": [
+        DialogLine(
+          text: "Ribbit!",
+          condition: () => true,
+        ),
+        DialogLine(
+          text: "Beware for trouble!",
+          condition: () => true,
+        ),
+        DialogLine(
+          text: "Give me some supplies and I might can make you something good!",
+          condition: () => true,
+        ),
+        DialogLine(
+          text: "Scavenge the forest for a stick and I will make a pickaxe with that rock of yours.",
+          condition: () => game.rockObtained && !game.stickObtained,
+        ),
+        DialogLine(
+          text: "You survived the forest?!",
+          condition: () => game.unlockedDeepForest,
+        ),
+      ],
+      "Caveman": [
+      DialogLine(
+        text: "I made these with my own two hands",
+        condition: () => true,
+      ),
+      DialogLine(
+        text: "Do you want a rock?",
+        condition: () => !game.rockObtained,
+      ),
+      DialogLine(
+        text: "Who knows.. that rock can do you well.",
+        condition: () => true,
+      ),
+      DialogLine(
+        text: "Goodluck on your journey soldier.",
+        condition: () => true,
+      ),
+      ],
+    };
+  }
 
 
   String getDialog(String npcName) {
@@ -88,6 +107,7 @@ class DialogManager {
     return availableDialogs[index].text;
   }
 
+
   String nextDialog(String npcName) {
     if (!_dialogs.containsKey(npcName)) return "";
 
@@ -102,6 +122,7 @@ class DialogManager {
 
     return getDialog(npcName);
   }
+
 
   void resetDialog(String npcName) {
     _indexes[npcName] = 0;

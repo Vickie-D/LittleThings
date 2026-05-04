@@ -1,4 +1,4 @@
-import 'dart:async';
+import 'dart:async' as async;
 
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
@@ -16,6 +16,8 @@ class littleThings extends FlameGame with HasKeyboardHandlerComponents, HasColli
   late final CameraComponent cam;
   late Player player;
   late Npc npc;
+  
+  
   late DialogManager dialogManager;
 
   int selectedIndex = 0;
@@ -25,12 +27,17 @@ class littleThings extends FlameGame with HasKeyboardHandlerComponents, HasColli
   String speaker = "";
 
   bool rockObtained = false;
+  bool stickObtained = false;
+  bool pickaxeObtained = false;
+  bool unlockedDeepForest = false;
 
+  async.Timer? _dialogTimer;
+  bool dialogAppear = false;
 
   @override
-  FutureOr<void> onLoad() async {
+  async.FutureOr<void> onLoad() async {
     player = Player();
-    dialogManager = DialogManager();
+    dialogManager = DialogManager(this);
     overlays.add('HealthDisplay');
 
     await images.loadAllImages();
@@ -38,13 +45,14 @@ class littleThings extends FlameGame with HasKeyboardHandlerComponents, HasColli
     // SPAWNPOINT
     _loadLevel("start-spawn", "town-biome");
 
-    debugMode = true;
+    // debugMode = true;
   }
 
   void updateHealth(){
     overlays.remove('HealthDisplay');
     overlays.add('HealthDisplay');
   }
+
 
 // hotbars
   void selectSlot(int index) {
@@ -53,6 +61,7 @@ class littleThings extends FlameGame with HasKeyboardHandlerComponents, HasColli
     overlays.remove('Hotbar');
     overlays.add('Hotbar');
   }
+
 
   void addToHotbar(String itemName) {
     for (int i = 0; i < hotbarItems.length; i++) {
@@ -65,24 +74,59 @@ class littleThings extends FlameGame with HasKeyboardHandlerComponents, HasColli
     }
   }
 
+  void removeFromHotbar(String itemName) {
+    for (int i = 0; i < hotbarItems.length; i++) {
+      if (hotbarItems[i] == itemName) {
+        hotbarItems[i] = "";
+        overlays.remove('Hotbar');
+        overlays.add('Hotbar');
+        break;
+      }
+    }
+  }
+
 
 
 // Text
   void npcGetMessage(String npc) {
-    final text = dialogManager.getDialog(npc);
+    _dialogTimer?.cancel();
 
-    if (text.isEmpty) {
-      overlays.remove('TextOverlay');
-      return;
+    dialogAppear = true;
+
+    if (rockObtained && stickObtained && !pickaxeObtained && npc == "Boy") { 
+      final text = "Here's a pickaxe.";
+
+      showTextOverlay(npc, text);
+
+      removeFromHotbar("Stick");
+      removeFromHotbar("Rock");
+      addToHotbar("Pickaxe");
+
+      pickaxeObtained = true;
+
+    } else {
+      final text = dialogManager.nextDialog(npc);
+
+      if (text.isEmpty) {
+        dialogManager.resetDialog(npc);
+        hideTextOverlay();
+        npc = "";
+
+      } else {
+        showTextOverlay(npc, text);
+        if (npc == "Caveman" && !rockObtained) {
+          addToHotbar("Rock");
+          
+          rockObtained = true;
+        }
+      }
     }
 
-    Future.delayed(const Duration(seconds: 5), () { 
-      overlays.remove('TextOverlay'); }
-    );
-    
-    speaker = npc;
-    textOverlayed = text;
-    overlays.add('TextOverlay');
+
+    _dialogTimer = async.Timer(const Duration(seconds: 3), () {
+      overlays.remove('TextOverlay');
+      dialogAppear = false;
+    }); 
   }
 
   void showTextOverlay(String npc, String text) {
@@ -129,10 +173,6 @@ class littleThings extends FlameGame with HasKeyboardHandlerComponents, HasColli
 
     cam = CameraComponent(
       world: level,
-      // viewport: FixedSizeViewport(
-      //   windowWidth,
-      //   windowHeight
-      // ),
     );
 
 
@@ -148,3 +188,4 @@ class littleThings extends FlameGame with HasKeyboardHandlerComponents, HasColli
     addAll([cam, level]);
   }
 }
+

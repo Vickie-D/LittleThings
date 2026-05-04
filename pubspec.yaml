@@ -35,6 +35,7 @@ flutter:
     - assets/images/enemy/Slime/
     - assets/images/dialog/
     - assets/images/items/
-    - assets/images/items/Branch/
+    - assets/images/items/Stick/
     - assets/images/items/Pickaxe/
     - assets/images/items/Sword/
+    - assets/images/items/Rock/

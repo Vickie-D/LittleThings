@@ -11,7 +11,6 @@ import 'package:little_things_game/components/custom_hitbox.dart';
 import 'package:little_things_game/components/utils.dart';
 import 'package:little_things_game/components/map_teleport.dart';
 import 'package:little_things_game/components/item.dart';
-import 'package:little_things_game/components/dialog_manager.dart';
 
 
 enum PlayerState {
@@ -26,6 +25,8 @@ enum PlayerState {
   walkDownSword("male_WalkDown", 6),
   walkUpSword("male_WalkUp", 6),
   idleSword("male_Idle", 1),
+
+  attack("male_Attack", 6),
   ;
 
   final String assetName;
@@ -50,6 +51,8 @@ class Player extends SpriteAnimationGroupComponent with HasGameReference<littleT
   late final SpriteAnimation walkRightSwordAnimation;
   late final SpriteAnimation idleSwordAnimation;
 
+  late final SpriteAnimation attackAnimation;
+
   late final Vector2 startingPosition;
   final double stepTime = 0.05;
   double moveSpeed = 150;
@@ -59,6 +62,11 @@ class Player extends SpriteAnimationGroupComponent with HasGameReference<littleT
   double maxHealth = 100;
   late double currentHealth = 100;
 
+  bool _isAttacking = false;
+  double _attackCooldown = 0;
+  final double attackRange = 30; 
+  final double attackDelay = 1.0; 
+
   late String itemPath = "";
   bool reachedCheckpoint = false;
   bool action = false;
@@ -67,9 +75,11 @@ class Player extends SpriteAnimationGroupComponent with HasGameReference<littleT
 
 
 
-  Vector2 velocity = Vector2.zero();
 
+  Vector2 velocity = Vector2.zero();
   List<CollisionBlock> collisionBlocks = [];
+
+
   CustomHitbox hitbox = CustomHitbox(
     offsetX: 4,
     offsetY: -1,
@@ -95,6 +105,38 @@ class Player extends SpriteAnimationGroupComponent with HasGameReference<littleT
     
     return super.onLoad();
   }
+
+  void _attack(){
+    if (_attackCooldown > 0) return;
+
+    _isAttacking = true;
+    _attackCooldown = attackDelay;
+
+    _dealDamageIfInRange();
+
+    Future.delayed(const Duration(milliseconds: 400), () {
+      _isAttacking = false;
+    });
+  }
+
+  void _dealDamageIfInRange() {
+    final enemies = game.children;
+
+    for (final e in enemies) {
+      if (e == this) continue;
+
+      final distance = position.distanceTo((e as dynamic).position);
+
+      if (distance <= attackRange) {
+        try {
+          (e as dynamic).takeDamage(20);
+        } catch (_) {
+          // ignore objects without health
+        }
+      }
+    }
+  }
+
 
   void takeDamage(double amount) {
     currentHealth = (currentHealth - amount).clamp(0, maxHealth);
@@ -171,29 +213,35 @@ class Player extends SpriteAnimationGroupComponent with HasGameReference<littleT
     
 
   // actions
-    if (keysPressed.contains(LogicalKeyboardKey.enter)) { 
+    if (keysPressed.contains(LogicalKeyboardKey.keyN)) { 
       action = true;
     } else {
       action = false;
     }
+    if (keysPressed.contains(LogicalKeyboardKey.keyM)) { 
+      _attack();
+    }
 
 
-    if (event is KeyDownEvent && event.logicalKey == LogicalKeyboardKey.space && npcCollision && currentNpcCollision.isNotEmpty) {
+    if (event is KeyDownEvent && event.logicalKey == LogicalKeyboardKey.space) {
 
-      final text = game.dialogManager.nextDialog(currentNpcCollision);
-
-      if (text.isEmpty) {
-        game.dialogManager.resetDialog(currentNpcCollision);
+      if (game.dialogAppear){
         game.overlays.remove('TextOverlay');
-        currentNpcCollision = "";
-      } else {
-        game.speaker = currentNpcCollision;
-        game.textOverlayed = text;
-        game.overlays.add('TextOverlay');
+        game.dialogAppear = false;
       }
-    };
-    return super.onKeyEvent(event, keysPressed);
 
+
+      if (npcCollision && currentNpcCollision.isNotEmpty && !game.dialogAppear){
+        if (game.rockObtained && game.stickObtained && !game.pickaxeObtained && currentNpcCollision == "Boy") { 
+          game.npcGetMessage("Boy");
+        } else {
+          game.npcGetMessage(currentNpcCollision);
+        }
+      }
+    }
+
+
+    return super.onKeyEvent(event, keysPressed);
   }
   
 
@@ -208,6 +256,9 @@ class Player extends SpriteAnimationGroupComponent with HasGameReference<littleT
   _updatePlayerState() {
     PlayerState playerState = PlayerState.idle;
 
+    if (_isAttacking) { 
+      playerState = PlayerState.attack;
+    }
 
 
     if (itemPath == "Sword"){
@@ -243,6 +294,8 @@ class Player extends SpriteAnimationGroupComponent with HasGameReference<littleT
     walkLeftSwordAnimation = _spriteAnimation(PlayerState.walkLeftSword, "/Sword");
     walkRightSwordAnimation = _spriteAnimation(PlayerState.walkRightSword, "/Sword");
 
+    attackAnimation = _specialSpriteAnimation(PlayerState.attack);
+
     animations = {
       PlayerState.idle: idleAnimation,
       PlayerState.walkUp: walkUpAnimation,
@@ -255,6 +308,8 @@ class Player extends SpriteAnimationGroupComponent with HasGameReference<littleT
       PlayerState.walkDownSword: walkDownSwordAnimation,
       PlayerState.walkLeftSword: walkLeftSwordAnimation,
       PlayerState.walkRightSword: walkRightSwordAnimation,
+
+      PlayerState.attack: attackAnimation,
     };
 
     current = PlayerState.idle;
@@ -270,7 +325,18 @@ class Player extends SpriteAnimationGroupComponent with HasGameReference<littleT
       )
     );
   }
- 
+
+   SpriteAnimation _specialSpriteAnimation(PlayerState state) {
+    return SpriteAnimation.fromFrameData(
+      game.images.fromCache("character$itemPath/${state.assetName}.png"),
+      SpriteAnimationData.sequenced(
+        amount: state.frameCount,
+        stepTime: 0.08,
+        textureSize: Vector2(20, 20),
+        loop: false,
+      )
+    );
+  }
 
 
   void _checkHorizontalCollisions() {
@@ -311,7 +377,7 @@ class Player extends SpriteAnimationGroupComponent with HasGameReference<littleT
   void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
     if (!reachedCheckpoint){
       if (other is mapTeleport) {
-        if (other.name != "deep-forest-biome" || DialogManager.unlockedDeepForest) {
+        if (other.name != "deep-forest-biome" || game.unlockedDeepForest) {
           _reachedCheckpoint(other.name);
         }
       }
@@ -319,23 +385,23 @@ class Player extends SpriteAnimationGroupComponent with HasGameReference<littleT
         if (!other.collected){
           game.addToHotbar(other.itemName);
           other.collect();
+          if (other.itemName == "Stick") { 
+            game.stickObtained = true;
+          }
         }
       }
-      // if (other is Npc) {
-      //   npcCollision = true;
-      //   currentNpcCollision = other.name;
-      // }
       if (other is Rock && game.hotbarItems[game.selectedIndex] == "Pickaxe") { 
         velocity = Vector2(0, 0);
 
         if (action) { 
           other.removeFromParent();
-          DialogManager.unlockedDeepForest = true;
+          game.unlockedDeepForest = true;
         }
       }
       super.onCollision(intersectionPoints, other);
     }
   }
+
 
   @override
   void onCollisionStart(Set<Vector2> points, PositionComponent other) {
@@ -357,13 +423,9 @@ class Player extends SpriteAnimationGroupComponent with HasGameReference<littleT
     super.onCollisionEnd(other);
   }
 
+
   void _reachedCheckpoint(String nextMap) {
     reachedCheckpoint = true;
-    // if(scale.x > 0) {
-    //   position = position - Vector2(20, 20);
-    // } else if (scale.x < 0) {
-    //   position = position + Vector2(20, -20);
-    // }
 
     const reachedCheckpointDuration = Duration(milliseconds: 380);
     Future.delayed(reachedCheckpointDuration, () {
@@ -376,7 +438,4 @@ class Player extends SpriteAnimationGroupComponent with HasGameReference<littleT
       });
     });
   }
-
-
-
 }

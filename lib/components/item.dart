@@ -27,7 +27,7 @@ class Item extends SpriteAnimationComponent with HasGameReference<littleThings>,
       collisionType: CollisionType.passive,
     ),);
 
-    if(itemName != "Branch") {
+    if(itemName != "Stick") {
       animation = SpriteAnimation.fromFrameData(
         game.images.fromCache("$iconPath/$itemName.png"),
         SpriteAnimationData.sequenced(
